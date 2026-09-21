@@ -1,0 +1,24 @@
+{
+  "name": "salesforce-cpq-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright framework for Salesforce CPQ. Tests reuse saved auth state so they skip login and MFA.",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "auth:save": "playwright test --project=setup --headed",
+    "auth:url": "node scripts/print-sf-auth-url.mjs",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen https://sayu2-dev-ed.develop.lightning.force.com"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.2",
+    "dotenv": "^18.0.1",
+    "otplib": "^13.5.0",
+    "typescript": "^5.9.3"
+  }
+}
