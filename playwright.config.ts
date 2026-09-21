@@ -12,9 +12,9 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
   use: {
     baseURL: env.baseUrl,
-    trace: 'retain-on-failure',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
+    trace: 'on',
+    screenshot: 'on',
+    video: 'on',
     actionTimeout: 20_000,
     navigationTimeout: 60_000,
     viewport: { width: 1920, height: 1080 },
