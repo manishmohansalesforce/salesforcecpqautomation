@@ -4,6 +4,7 @@
   "private": true,
   "description": "Playwright framework for Salesforce CPQ. Tests reuse saved auth state so they skip login and MFA.",
   "scripts": {
+    "compile": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "auth:save": "playwright test --project=setup --headed",
     "auth:url": "node scripts/print-sf-auth-url.mjs",

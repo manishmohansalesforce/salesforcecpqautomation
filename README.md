@@ -136,6 +136,10 @@ If a test lands on the Salesforce login page, it fails fast with instructions to
 
 ## CI (GitHub Actions)
 
+Workflow: `.github/workflows/ci.yml`. On every push and pull request it installs dependencies and **compiles** TypeScript (`npm run compile`). That job does not need Salesforce secrets.
+
+Playwright e2e runs in a second job only when `SF_AUTH_URL` is set. If the secret is missing, e2e is skipped and compile still passes.
+
 GitHub-hosted runners cannot receive a mobile OTP. Do not use `SF_USERNAME` / `SF_PASSWORD` in CI for this org.
 
 1. On your laptop: `sf org login web --alias cpq-de` and complete the OTP on your phone.
@@ -152,10 +156,10 @@ Repo **Settings → Secrets and variables → Actions**:
 
 | Secret | Required | Purpose |
 |---|---|---|
-| `SF_AUTH_URL` | Yes | `sfdxAuthUrl` from `npm run auth:url` |
+| `SF_AUTH_URL` | Required for e2e | `sfdxAuthUrl` from `npm run auth:url` |
 | `SF_BASE_URL` | Optional | Defaults to the DE Lightning URL |
 
-Keep login and tests in **one job**. Workflow: `.github/workflows/playwright.yml`.
+Compile and e2e stay in one workflow. E2e login and tests stay in one job.
 
 If GitHub runner IPs are blocked, clear profile **Login IP Ranges** or use a self-hosted runner. Use a dedicated automation user when you can.
 
