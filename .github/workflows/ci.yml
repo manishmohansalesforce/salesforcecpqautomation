@@ -75,3 +75,23 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+      - name: Publish results to dashboard
+        if: steps.auth.outputs.available == 'true' && !cancelled()
+        env:
+          DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
+          DASHBOARD_INGEST_TOKEN: ${{ secrets.DASHBOARD_INGEST_TOKEN }}
+          SUITE_NAME: Salesforce CPQ Playwright
+          ENVIRONMENT: CI
+        run: |
+          set -euo pipefail
+          if [ -z "${DASHBOARD_URL}" ] || [ -z "${DASHBOARD_INGEST_TOKEN}" ]; then
+            echo "DASHBOARD_URL or DASHBOARD_INGEST_TOKEN is not set. Skipping dashboard ingest."
+            exit 0
+          fi
+          if [ ! -f test-results/results.json ]; then
+            echo "No Playwright JSON report at test-results/results.json. Skipping dashboard ingest."
+            exit 0
+          fi
+          curl -fsS --max-time 90 "${DASHBOARD_URL}/api/health" || true
+          node scripts/playwright-report-to-dashboard.mjs test-results/results.json

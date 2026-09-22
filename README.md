@@ -158,6 +158,12 @@ Repo **Settings → Secrets and variables → Actions**:
 |---|---|---|
 | `SF_AUTH_URL` | Required for e2e | `sfdxAuthUrl` from `npm run auth:url` |
 | `SF_BASE_URL` | Optional | Defaults to the DE Lightning URL |
+| `DASHBOARD_URL` | Required for dashboard ingest | Render API origin, e.g. `https://salesforce-cpq-dashboard-api.onrender.com` |
+| `DASHBOARD_INGEST_TOKEN` | Required for dashboard ingest | Same value as `GITHUB_ACTIONS_INGEST_TOKEN` on Render |
+
+After Playwright finishes (pass or fail), CI wakes the API and POSTs `test-results/results.json` plus a zip of `playwright-report/` to `/api/ingest/github-actions/run-with-report`. If the dashboard secrets are missing, ingest is skipped and the job still succeeds.
+
+Live GitHub Actions step status and failed-test triage are read by the dashboard API (`GITHUB_CI_TOKEN` on Render), not by this workflow. Use **Run pipeline** on the dashboard (this workflow already has `workflow_dispatch`) and open **CI Failure Triage** after a failed run.
 
 Compile and e2e stay in one workflow. E2e login and tests stay in one job.
 
